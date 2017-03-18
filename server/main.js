@@ -18,7 +18,7 @@ app.get('/man', (req, res) =>{
 	connection.query("SELECT * FROM man", (err, rows) => {
 		if(err) throw err;
 
-		send(rows);
+		res.send(rows);
 	});
 });
 const server = app.listen(port, () => {
