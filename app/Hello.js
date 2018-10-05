@@ -1,4 +1,5 @@
 import React from 'react';
+import Grid from './Grid';
 import 'whatwg-fetch';
 
 // Parent Component
@@ -6,27 +7,52 @@ class Hello extends React.Component {
 	constructor(){
 		super(...arguments);
 		this.state = {
-			mans:[]
+			mans:[],
+            members: [],
+            searchText: ""
 		};
+
+		this.onSearch = this.onSearch.bind(this);
+        this.onChangeSearchText = this.onChangeSearchText.bind(this);
 	}
 
 	componentDidMount(){
-		fetch('/man',{
-			method: 'get',
-			dataType: 'json',
-			headers:{
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}
-		})
-		.then((response) => response.json())
-		.then((responseData) => {
-			this.setState({mans: responseData});
-		})
-		.catch((error)=>{
-			console.log('Error fetching man',error);
-		});
+        fetch('/users')
+            .then(res => {
+                return res.text()
+            })
+            .then(members => {
+                this.setState({
+                    members: JSON.parse(members)
+                })
+            })
 	}
+
+	onChangeSearchText(e) {
+	    console.log('change'+ e.target.value);
+        this.setState({
+            "searchText": e.currentTarget.value
+
+        })
+    }
+
+	onSearch(e) {
+        e.preventDefault();
+        console.log("search!");
+
+        fetch('/user/' + this.state.searchText)
+            .then(res => {
+                return res.text()
+            })
+            .then(members => {
+                this.setState({
+                    members: JSON.parse(members)
+                })
+            })
+
+        // console.log(this.state.searchText);
+    }
+
 	render() {
 		let mans = this.state.mans.map( (man) => {
 			return <Guy
@@ -39,6 +65,15 @@ class Hello extends React.Component {
 		return (
 			<div>
 				<h1>CalyFactory Developers</h1>
+                <label>{this.state.searchText}</label>
+                <input id="searchText"
+                       onChange={this.onChangeSearchText}
+                       value={this.state.searchText}
+                />
+                <button type="button"
+                        onClick={this.onSearch}
+                >검색</button>
+                <Grid members={this.state.members}/>
 				<ul>
 				{mans}
 				</ul>
