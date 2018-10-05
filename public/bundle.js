@@ -18349,7 +18349,7 @@
 
 	var _Grid2 = _interopRequireDefault(_Grid);
 
-	__webpack_require__(159);
+	__webpack_require__(160);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18515,6 +18515,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _tableConfig = __webpack_require__(159);
+
+	var _tableConfig2 = _interopRequireDefault(_tableConfig);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18529,23 +18533,24 @@
 	    function Grid(props) {
 	        _classCallCheck(this, Grid);
 
-	        return _possibleConstructorReturn(this, (Grid.__proto__ || Object.getPrototypeOf(Grid)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (Grid.__proto__ || Object.getPrototypeOf(Grid)).call(this, props));
+
+	        _this.createTableHeader = _this.createTableHeader.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(Grid, [{
 	        key: 'createTableHeader',
-	        value: function createTableHeader(members) {
-	            var tableHeader = [];
-
-	            for (var i = 0; i < members.length; i++) {
-	                tableHeader.push(_react2.default.createElement(
+	        value: function createTableHeader() {
+	            var columnNames = _tableConfig2.default.users.columnName;
+	            console.log(columnNames);
+	            return columnNames.map(function (columnName, idx) {
+	                return _react2.default.createElement(
 	                    'th',
-	                    { key: i },
-	                    'Column',
-	                    i
-	                ));
-	            }
-	            return tableHeader;
+	                    { key: idx },
+	                    columnName
+	                );
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -18559,25 +18564,34 @@
 	                    _react2.default.createElement(
 	                        'tr',
 	                        null,
-	                        this.createTableHeader(this.props.members)
+	                        this.createTableHeader()
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'tbody',
 	                    null,
-	                    _react2.default.createElement(
-	                        'tr',
-	                        null,
-	                        this.props.members.map(function (member, idx) {
-	                            return _react2.default.createElement(
+	                    this.props.members.map(function (member, idx) {
+
+	                        return _react2.default.createElement(
+	                            'tr',
+	                            { key: idx },
+	                            _react2.default.createElement(
 	                                'td',
-	                                { key: idx },
+	                                null,
+	                                member.AgentCode
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
 	                                member.AgentSeqNo
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                member.CustomerName
 	                            )
-	                            // <td key={idx}>{member.CustomerName}</td>
-	                            ;
-	                        })
-	                    )
+	                        );
+	                    })
 	                )
 	            );
 	        }
@@ -18592,6 +18606,23 @@
 
 /***/ }),
 /* 159 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var table_config = {
+	    "users": {
+	        "columnName": ["대리점코", "대리점번호", "대리점이름"]
+	    }
+	};
+
+	exports.default = table_config;
+
+/***/ }),
+/* 160 */
 /***/ (function(module, exports) {
 
 	'use strict';

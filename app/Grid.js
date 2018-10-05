@@ -1,37 +1,44 @@
 import React, { Component } from 'react';
+import table_config from './config/table-config';
 
 class Grid extends Component {
     constructor(props) {
         super(props);
 
+        this.createTableHeader = this.createTableHeader.bind(this);
     }
 
-    createTableHeader(members) {
-        let tableHeader = [];
-
-        for (let i = 0; i < members.length; i++) {
-            tableHeader.push(<th key={i}>Column{i}</th>)
-        }
-        return tableHeader;
+    createTableHeader() {
+        let columnNames = table_config.users.columnName;
+        console.log(columnNames);
+        return columnNames.map((columnName, idx) => {
+            return <th key={idx}>{columnName}</th>
+        })
     }
+
+
 
     render() {
         return (
             <table>
                 <thead>
                 <tr>
-                    {this.createTableHeader(this.props.members)}
+                    {this.createTableHeader()}
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+
                     {this.props.members.map((member, idx) => {
+
                         return (
-                            <td key={idx}>{member.AgentSeqNo}</td>
-                            // <td key={idx}>{member.CustomerName}</td>
+                            <tr key={idx}>
+                                <td>{member.AgentCode}</td>
+                                <td>{member.AgentSeqNo}</td>
+                                <td>{member.CustomerName}</td>
+                            </tr>
                         )
                     })}
-                </tr>
+
                 </tbody>
             </table>
         )

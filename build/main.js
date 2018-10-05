@@ -36,7 +36,7 @@ app.use(_bodyParser2.default.json());
 
 app.get('/users', function (req, res) {
     var pool = new _mssql2.default.ConnectionPool(config, function (err) {
-        pool.request().query('SELECT AgentSeqNo ' + 'FROM AgentInfo', function (err, result) {
+        pool.request().query('SELECT AgentCode, AgentSeqNo, CustomerName ' + 'FROM AgentInfo', function (err, result) {
             if (err) {
                 console.log(err);
                 return res.send('pong');
@@ -49,15 +49,12 @@ app.get('/users', function (req, res) {
 
 app.get('/user/:id?', function (req, res) {
     var id = req.params.id;
-    console.log(req.params);
 
-    var query = "SELECT AgentSeqNo " + "FROM AgentInfo ";
+    var query = "SELECT AgentCode, AgentSeqNo, CustomerName " + "FROM AgentInfo ";
 
     if (id) {
         query += "WHERE AgentSeqNo " + "LIKE '%" + id + "%' ";
     }
-
-    console.log(query);
 
     var pool = new _mssql2.default.ConnectionPool(config, function (err) {
         pool.request().query(query, function (err, result) {

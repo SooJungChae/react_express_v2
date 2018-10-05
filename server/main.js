@@ -23,7 +23,7 @@ app.get('/users', (req, res) => {
     const pool = new sql.ConnectionPool(config, err => {
         pool.request()
             .query(
-                'SELECT AgentSeqNo ' +
+                'SELECT AgentCode, AgentSeqNo, CustomerName ' +
                 'FROM AgentInfo',
                 (err, result) => {
                     if (err) {
@@ -38,9 +38,8 @@ app.get('/users', (req, res) => {
 
 app.get('/user/:id?', (req, res) => {
     const id = req.params.id;
-    console.log(req.params);
 
-    let query = "SELECT AgentSeqNo " +
+    let query = "SELECT AgentCode, AgentSeqNo, CustomerName " +
                 "FROM AgentInfo ";
 
     if (id) {
@@ -48,9 +47,7 @@ app.get('/user/:id?', (req, res) => {
                 "LIKE '%" + id + "%' ";
     }
 
-console.log(query);
-
-const pool = new sql.ConnectionPool(config, err => {
+    const pool = new sql.ConnectionPool(config, err => {
         pool.request()
             .query(
                 query,
