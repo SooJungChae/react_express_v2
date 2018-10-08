@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/users', (req, res) => {
+    console.log("/users");
     const pool = new sql.ConnectionPool(config, err => {
         pool.request()
             .query(
@@ -37,14 +38,16 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/user/:id?', (req, res) => {
+    console.log("/user/:id?");
     const id = req.params.id;
 
     let query = "SELECT AgentCode, AgentSeqNo, CustomerName " +
                 "FROM AgentInfo ";
 
     if (id) {
-        query += "WHERE AgentSeqNo " +
-                "LIKE '%" + id + "%' ";
+        query += "WHERE AgentCode  LIKE '%" + id + "%' " +
+            " AgentSeqNo LIKE '%" +  + "%'" +
+            "";
     }
 
     const pool = new sql.ConnectionPool(config, err => {
@@ -61,6 +64,12 @@ app.get('/user/:id?', (req, res) => {
                 })
     });
 });
+
+app.post('/login', (req, res) => {
+    console.log(req.body);
+    res.send(JSON.stringify({result: true}));
+});
+
 
 const server = app.listen(port, () => {
 	console.log('Express listening on port', port);

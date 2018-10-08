@@ -35,6 +35,7 @@ app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use(_bodyParser2.default.json());
 
 app.get('/users', function (req, res) {
+    console.log("/users");
     var pool = new _mssql2.default.ConnectionPool(config, function (err) {
         pool.request().query('SELECT AgentCode, AgentSeqNo, CustomerName ' + 'FROM AgentInfo', function (err, result) {
             if (err) {
@@ -48,12 +49,13 @@ app.get('/users', function (req, res) {
 });
 
 app.get('/user/:id?', function (req, res) {
+    console.log("/user/:id?");
     var id = req.params.id;
 
     var query = "SELECT AgentCode, AgentSeqNo, CustomerName " + "FROM AgentInfo ";
 
     if (id) {
-        query += "WHERE AgentSeqNo " + "LIKE '%" + id + "%' ";
+        query += "WHERE AgentCode  LIKE '%" + id + "%' " + " AgentSeqNo LIKE '%" + +"%'" + "";
     }
 
     var pool = new _mssql2.default.ConnectionPool(config, function (err) {
@@ -66,6 +68,11 @@ app.get('/user/:id?', function (req, res) {
             return res.send(JSON.stringify(result.recordsets[0]));
         });
     });
+});
+
+app.post('/login', function (req, res) {
+    console.log(req.body);
+    res.send(JSON.stringify({ result: true }));
 });
 
 var server = app.listen(port, function () {
