@@ -13678,6 +13678,7 @@
 	            agentCode: "",
 	            sawonCode: "",
 	            password: "",
+	            president: "",
 	            toGrid: false
 	        };
 
@@ -13719,6 +13720,10 @@
 	            var url = 'login';
 	            var params = this.state;
 
+	            // 사용자 정보 체크
+	            // 유효한 사용자라면 화면 이동
+	            // 아니라면 에러 메세지
+
 	            // url.search = new URLSearchParams(params);
 	            fetch("/login", {
 	                method: "POST",
@@ -13728,20 +13733,18 @@
 	                },
 	                body: JSON.stringify(this.state)
 	            }).then(function (res) {
-	                console.log('return res.json()');
 	                return res.json();
 	            }).then(function (res) {
-	                console.log("recieve data");
+	                if (res.resultCount == 0) {
+	                    console.log("데이터 없음");
+	                    return;
+	                }
+
 	                _this2.setState({
 	                    toGrid: true,
-	                    members: res.result
+	                    president: res.president
 	                });
-	                // return <Link to='/grid'>grid go</Link>
-	                // if(res.result) {
-	                //
-	                // }
 	            });
-	            // console.log(this.state);
 	        }
 	    }, {
 	        key: 'render',
@@ -13749,7 +13752,7 @@
 	            if (this.state.toGrid) {
 	                return _react2.default.createElement(_reactRouter.Redirect, { to: {
 	                        pathname: "/grid",
-	                        state: { agentCode: this.state.agentCode }
+	                        state: { president: this.state.president }
 	                    } });
 	            }
 	            return _react2.default.createElement(
@@ -13901,7 +13904,7 @@
 
 	        _this.state = {
 	            members: [],
-	            agentCode: ''
+	            president: ''
 	        };
 
 	        _this.createTableHeader = _this.createTableHeader.bind(_this);
@@ -13913,12 +13916,15 @@
 	        value: function componentDidMount() {
 	            var _this2 = this;
 
-	            fetch('/users').then(function (res) {
+	            var president = this.props.location.state.president;
+	            console.log(president);
+
+	            fetch('/grid').then(function (res) {
 	                return res.text();
 	            }).then(function (members) {
 	                _this2.setState({
 	                    members: JSON.parse(members),
-	                    agentCode: _this2.props.location.state.agentCode
+	                    president: president
 	                });
 	            });
 	        }
@@ -13926,7 +13932,7 @@
 	        key: 'createTableHeader',
 	        value: function createTableHeader() {
 	            var columnNames = _tableConfig2.default.users.columnName;
-	            console.log(columnNames);
+	            // console.log(columnNames);
 	            return columnNames.map(function (columnName, idx) {
 	                return _react2.default.createElement(
 	                    'th',
@@ -13944,7 +13950,7 @@
 	                _react2.default.createElement(
 	                    'h2',
 	                    null,
-	                    this.state.agentCode
+	                    this.state.president
 	                ),
 	                _react2.default.createElement(
 	                    'table',

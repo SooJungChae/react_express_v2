@@ -7,30 +7,31 @@ class Grid extends Component {
 
         this.state = {
             members: [],
-            agentCode: ''
+            president: ''
         }
 
         this.createTableHeader = this.createTableHeader.bind(this);
     }
 
     componentDidMount(){
+        const president = this.props.location.state.president;
+        console.log(president);
 
-
-        fetch('/users')
+        fetch('/grid')
             .then(res => {
                 return res.text()
             })
             .then(members => {
                 this.setState({
                     members: JSON.parse(members),
-                    agentCode: this.props.location.state.agentCode
+                    president: president
                 })
             })
     }
 
     createTableHeader() {
         let columnNames = table_config.users.columnName;
-        console.log(columnNames);
+        // console.log(columnNames);
         return columnNames.map((columnName, idx) => {
             return <th key={idx}>{columnName}</th>
         })
@@ -39,7 +40,7 @@ class Grid extends Component {
     render() {
         return (
             <div>
-                <h2>{this.state.agentCode}</h2>
+                <h2>{this.state.president}</h2>
             <table>
                 <thead>
                 <tr>

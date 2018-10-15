@@ -10,6 +10,7 @@ class Login extends Component {
             agentCode: "",
             sawonCode: "",
             password: "",
+            president: "",
             toGrid: false
         };
 
@@ -43,6 +44,10 @@ class Login extends Component {
         let url = 'login';
         let params = this.state;
 
+        // 사용자 정보 체크
+        // 유효한 사용자라면 화면 이동
+        // 아니라면 에러 메세지
+
         // url.search = new URLSearchParams(params);
         fetch("/login", {
             method: "POST",
@@ -53,21 +58,19 @@ class Login extends Component {
             body: JSON.stringify(this.state)
         })
             .then(res => {
-                console.log('return res.json()');
                 return res.json()
             })
             .then(res => {
-                console.log("recieve data");
+                if (res.resultCount == 0) {
+                    console.log("데이터 없음");
+                    return;
+                }
+
                 this.setState({
                     toGrid: true,
-                    members: res.result
-                })
-                // return <Link to='/grid'>grid go</Link>
-                // if(res.result) {
-                //
-                // }
+                    president: res.president
+                });
             })
-        // console.log(this.state);
     }
 
 
@@ -75,7 +78,7 @@ class Login extends Component {
         if (this.state.toGrid) {
             return <Redirect to={{
                 pathname: "/grid",
-                state: { agentCode: this.state.agentCode }
+                state: { president: this.state.president }
             }} />
 
         }

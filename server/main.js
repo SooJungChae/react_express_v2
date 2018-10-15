@@ -19,8 +19,8 @@ app.use('/', express.static(__dirname + "/../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/users', (req, res) => {
-    console.log("/users");
+app.get('/grid', (req, res) => {
+    console.log("/grid");
     const pool = new sql.ConnectionPool(config, err => {
         pool.request()
             .query(
@@ -65,26 +65,33 @@ app.get('/user/:id?', (req, res) => {
     });
 });
 
-// app.get('/grid', (req, res) => {
-//     console.log('grid form!');
-//     return res.send(JSON.stringify('grid form'));
-// });
-
 app.post('/login', (req, res) => {
-    console.log(req.body);
+    let params = req.body;
+    console.log('/login');
+    console.log(params);
+
+    let query = "SELECT "
+        // + "AgentSeqNo "
+        + "President "
+        + "FROM AgentInfo "
+        + "WHERE AgentCode = '" + params.agentCode + "' "
+        + "AND AgentSeqNo = '" + params.password + "' "
+        + "";
 
     const pool = new sql.ConnectionPool(config, err => {
         pool.request()
-            .query(
-                'SELECT AgentCode, AgentSeqNo, CustomerName ' +
-                'FROM AgentInfo',
+            .query(query,
                 (err, result) => {
                     if (err) {
                         console.log(err);
                         return res.send('pong');
                     }
-                    console.log(result);
-                    return res.send(JSON.stringify(result.recordsets[0]));
+                    console.dir(result);
+                    return res.send({
+                        resultCount: result.rowsAffected[0],
+                        president: result.recordset[0].President
+                    });
+
                 })
     });
 
