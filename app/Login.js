@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 
 class Login extends Component {
 
@@ -8,7 +9,8 @@ class Login extends Component {
         this.state = {
             agentCode: "",
             sawonCode: "",
-            password: ""
+            password: "",
+            toGrid: false
         };
 
         console.log(this);
@@ -51,19 +53,32 @@ class Login extends Component {
             body: JSON.stringify(this.state)
         })
             .then(res => {
+                console.log('return res.json()');
                 return res.json()
             })
             .then(res => {
-                if(res.result) {
-                    // this.props.history.push("/Hello");
-
-                }
+                console.log("recieve data");
+                this.setState({
+                    toGrid: true,
+                    members: res.result
+                })
+                // return <Link to='/grid'>grid go</Link>
+                // if(res.result) {
+                //
+                // }
             })
-        console.log(this.state);
+        // console.log(this.state);
     }
 
 
     render() {
+        if (this.state.toGrid) {
+            return <Redirect to={{
+                pathname: "/grid",
+                state: { agentCode: this.state.agentCode }
+            }} />
+
+        }
         return (
             <div>
                 로그인 페이지

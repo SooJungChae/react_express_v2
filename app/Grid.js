@@ -5,7 +5,27 @@ class Grid extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            members: [],
+            agentCode: ''
+        }
+
         this.createTableHeader = this.createTableHeader.bind(this);
+    }
+
+    componentDidMount(){
+
+
+        fetch('/users')
+            .then(res => {
+                return res.text()
+            })
+            .then(members => {
+                this.setState({
+                    members: JSON.parse(members),
+                    agentCode: this.props.location.state.agentCode
+                })
+            })
     }
 
     createTableHeader() {
@@ -16,10 +36,10 @@ class Grid extends Component {
         })
     }
 
-
-
     render() {
         return (
+            <div>
+                <h2>{this.state.agentCode}</h2>
             <table>
                 <thead>
                 <tr>
@@ -28,8 +48,7 @@ class Grid extends Component {
                 </thead>
                 <tbody>
 
-                    {this.props.members.map((member, idx) => {
-
+                    {this.state.members.map((member, idx) => {
                         return (
                             <tr key={idx}>
                                 <td>{member.AgentCode}</td>
@@ -41,6 +60,7 @@ class Grid extends Component {
 
                 </tbody>
             </table>
+            </div>
         )
     }
 };

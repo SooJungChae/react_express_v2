@@ -13616,6 +13616,10 @@
 
 	var _Login2 = _interopRequireDefault(_Login);
 
+	var _Grid = __webpack_require__(65);
+
+	var _Grid2 = _interopRequireDefault(_Grid);
+
 	var _reactRouterDom = __webpack_require__(17);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -13628,12 +13632,8 @@
 	            'div',
 	            null,
 	            'Hello React-Router',
-	            _react2.default.createElement(
-	                _reactRouterDom.Link,
-	                { to: '/users' },
-	                'Dashboard'
-	            ),
-	            _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _Login2.default })
+	            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Login2.default }),
+	            _react2.default.createElement(_reactRouterDom.Route, { path: '/grid', component: _Grid2.default })
 	        )
 	    );
 	};
@@ -13644,7 +13644,7 @@
 /* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -13655,6 +13655,8 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(64);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13675,7 +13677,8 @@
 	        _this.state = {
 	            agentCode: "",
 	            sawonCode: "",
-	            password: ""
+	            password: "",
+	            toGrid: false
 	        };
 
 	        console.log(_this);
@@ -13687,21 +13690,21 @@
 	    }
 
 	    _createClass(Login, [{
-	        key: "handleAgent",
+	        key: 'handleAgent',
 	        value: function handleAgent(e) {
 	            this.setState({
 	                agentCode: e.target.value
 	            });
 	        }
 	    }, {
-	        key: "setSawonCode",
+	        key: 'setSawonCode',
 	        value: function setSawonCode(e) {
 	            this.setState({
 	                sawonCode: e.target.value
 	            });
 	        }
 	    }, {
-	        key: "setPassword",
+	        key: 'setPassword',
 	        value: function setPassword(e) {
 	            console.log(e.target.value);
 	            this.setState({
@@ -13709,8 +13712,10 @@
 	            });
 	        }
 	    }, {
-	        key: "onLoginUser",
+	        key: 'onLoginUser',
 	        value: function onLoginUser(e) {
+	            var _this2 = this;
+
 	            var url = 'login';
 	            var params = this.state;
 
@@ -13723,53 +13728,65 @@
 	                },
 	                body: JSON.stringify(this.state)
 	            }).then(function (res) {
+	                console.log('return res.json()');
 	                return res.json();
 	            }).then(function (res) {
-	                if (res.result) {
-	                    // this.props.history.push("/Hello");
-
-	                }
+	                console.log("recieve data");
+	                _this2.setState({
+	                    toGrid: true,
+	                    members: res.result
+	                });
+	                // return <Link to='/grid'>grid go</Link>
+	                // if(res.result) {
+	                //
+	                // }
 	            });
-	            console.log(this.state);
+	            // console.log(this.state);
 	        }
 	    }, {
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
+	            if (this.state.toGrid) {
+	                return _react2.default.createElement(_reactRouter.Redirect, { to: {
+	                        pathname: "/grid",
+	                        state: { agentCode: this.state.agentCode }
+	                    } });
+	            }
 	            return _react2.default.createElement(
-	                "div",
+	                'div',
 	                null,
-	                "\uB85C\uADF8\uC778 \uD398\uC774\uC9C0",
+	                '\uB85C\uADF8\uC778 \uD398\uC774\uC9C0',
 	                _react2.default.createElement(
-	                    "label",
+	                    'label',
 	                    null,
-	                    "\uB300\uB9AC\uC810\uCF54\uB4DC"
+	                    '\uB300\uB9AC\uC810\uCF54\uB4DC'
 	                ),
-	                _react2.default.createElement("input", { type: "text",
+	                _react2.default.createElement('input', { type: 'text',
 	                    onChange: this.handleAgent,
 	                    value: this.state.agentCode
 	                }),
 	                _react2.default.createElement(
-	                    "label",
-	                    { htmlFor: "sawonCode" },
-	                    "\uC0AC\uC6D0\uCF54\uB4DC"
+	                    'label',
+	                    { htmlFor: 'sawonCode' },
+	                    '\uC0AC\uC6D0\uCF54\uB4DC'
 	                ),
-	                _react2.default.createElement("input", { type: "text",
+	                _react2.default.createElement('input', { type: 'text',
 	                    onChange: this.setSawonCode,
 	                    value: this.state.sawonCode
 	                }),
 	                _react2.default.createElement(
-	                    "label",
-	                    { htmlFor: "password" },
-	                    "\uBE44\uBC00\uBC88\uD638"
+	                    'label',
+	                    { htmlFor: 'password' },
+	                    '\uBE44\uBC00\uBC88\uD638'
 	                ),
-	                _react2.default.createElement("input", { type: "password",
+	                _react2.default.createElement('input', { type: 'password',
 	                    onChange: this.setPassword,
 	                    value: this.state.password
 	                }),
 	                _react2.default.createElement(
-	                    "button",
+	                    'button',
 	                    { onClick: this.onLoginUser },
-	                    "\uB85C\uADF8\uC778"
+	                    '\uB85C\uADF8\uC778'
 	                )
 	            );
 	        }
@@ -13781,6 +13798,219 @@
 	;
 
 	exports.default = Login;
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	exports.__esModule = true;
+	exports.withRouter = exports.matchPath = exports.generatePath = exports.Switch = exports.StaticRouter = exports.Router = exports.Route = exports.Redirect = exports.Prompt = exports.MemoryRouter = undefined;
+
+	var _MemoryRouter2 = __webpack_require__(41);
+
+	var _MemoryRouter3 = _interopRequireDefault(_MemoryRouter2);
+
+	var _Prompt2 = __webpack_require__(49);
+
+	var _Prompt3 = _interopRequireDefault(_Prompt2);
+
+	var _Redirect2 = __webpack_require__(51);
+
+	var _Redirect3 = _interopRequireDefault(_Redirect2);
+
+	var _Route2 = __webpack_require__(44);
+
+	var _Route3 = _interopRequireDefault(_Route2);
+
+	var _Router2 = __webpack_require__(37);
+
+	var _Router3 = _interopRequireDefault(_Router2);
+
+	var _StaticRouter2 = __webpack_require__(54);
+
+	var _StaticRouter3 = _interopRequireDefault(_StaticRouter2);
+
+	var _Switch2 = __webpack_require__(56);
+
+	var _Switch3 = _interopRequireDefault(_Switch2);
+
+	var _generatePath2 = __webpack_require__(52);
+
+	var _generatePath3 = _interopRequireDefault(_generatePath2);
+
+	var _matchPath2 = __webpack_require__(45);
+
+	var _matchPath3 = _interopRequireDefault(_matchPath2);
+
+	var _withRouter2 = __webpack_require__(60);
+
+	var _withRouter3 = _interopRequireDefault(_withRouter2);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	exports.MemoryRouter = _MemoryRouter3.default;
+	exports.Prompt = _Prompt3.default;
+	exports.Redirect = _Redirect3.default;
+	exports.Route = _Route3.default;
+	exports.Router = _Router3.default;
+	exports.StaticRouter = _StaticRouter3.default;
+	exports.Switch = _Switch3.default;
+	exports.generatePath = _generatePath3.default;
+	exports.matchPath = _matchPath3.default;
+	exports.withRouter = _withRouter3.default;
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _tableConfig = __webpack_require__(66);
+
+	var _tableConfig2 = _interopRequireDefault(_tableConfig);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Grid = function (_Component) {
+	    _inherits(Grid, _Component);
+
+	    function Grid(props) {
+	        _classCallCheck(this, Grid);
+
+	        var _this = _possibleConstructorReturn(this, (Grid.__proto__ || Object.getPrototypeOf(Grid)).call(this, props));
+
+	        _this.state = {
+	            members: [],
+	            agentCode: ''
+	        };
+
+	        _this.createTableHeader = _this.createTableHeader.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(Grid, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            fetch('/users').then(function (res) {
+	                return res.text();
+	            }).then(function (members) {
+	                _this2.setState({
+	                    members: JSON.parse(members),
+	                    agentCode: _this2.props.location.state.agentCode
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'createTableHeader',
+	        value: function createTableHeader() {
+	            var columnNames = _tableConfig2.default.users.columnName;
+	            console.log(columnNames);
+	            return columnNames.map(function (columnName, idx) {
+	                return _react2.default.createElement(
+	                    'th',
+	                    { key: idx },
+	                    columnName
+	                );
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    this.state.agentCode
+	                ),
+	                _react2.default.createElement(
+	                    'table',
+	                    null,
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            this.createTableHeader()
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        this.state.members.map(function (member, idx) {
+	                            return _react2.default.createElement(
+	                                'tr',
+	                                { key: idx },
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    member.AgentCode
+	                                ),
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    member.AgentSeqNo
+	                                ),
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    member.CustomerName
+	                                )
+	                            );
+	                        })
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Grid;
+	}(_react.Component);
+
+	;
+
+	exports.default = Grid;
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var table_config = {
+	    "users": {
+	        "columnName": ["대리점코드", "대리점번호", "대리점이름"]
+	    }
+	};
+
+	exports.default = table_config;
 
 /***/ })
 /******/ ]);

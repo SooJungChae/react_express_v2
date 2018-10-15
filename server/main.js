@@ -65,9 +65,30 @@ app.get('/user/:id?', (req, res) => {
     });
 });
 
+// app.get('/grid', (req, res) => {
+//     console.log('grid form!');
+//     return res.send(JSON.stringify('grid form'));
+// });
+
 app.post('/login', (req, res) => {
     console.log(req.body);
-    res.send(JSON.stringify({result: true}));
+
+    const pool = new sql.ConnectionPool(config, err => {
+        pool.request()
+            .query(
+                'SELECT AgentCode, AgentSeqNo, CustomerName ' +
+                'FROM AgentInfo',
+                (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        return res.send('pong');
+                    }
+                    console.log(result);
+                    return res.send(JSON.stringify(result.recordsets[0]));
+                })
+    });
+
+    // res.send(JSON.stringify({result: true}));
 });
 
 
