@@ -5,10 +5,12 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 const App = () => (
     <Router>
-        {/*<Link to="/users">Dashboard</Link>*/}
-        <Route exact path="/" component={Login}/>
-        <Route path="/grid" component={Grid}/>
-        {/*<Route path="/" component={Login}/>*/}
+        <div>
+            {/*<Link to="/users">Dashboard</Link>*/}
+            <Route exact path="/" component={Login}/>
+            <Route path="/grid" component={Grid}/>
+            {/*<Route path="/" component={Login}/>*/}
+        </div>
     </Router>
 )
 

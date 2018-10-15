@@ -13631,7 +13631,6 @@
 	        _react2.default.createElement(
 	            'div',
 	            null,
-	            'Hello React-Router',
 	            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Login2.default }),
 	            _react2.default.createElement(_reactRouterDom.Route, { path: '/grid', component: _Grid2.default })
 	        )
