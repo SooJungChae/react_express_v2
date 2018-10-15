@@ -1,7 +1,15 @@
 import React from 'react';
 import Login from './Login';
-//import Hello from './Hello';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
-const root = document.getElementById("root")
+const App = () => (
+    <Router>
+        <div>
+            Hello React-Router
+            <Link to="/users">Dashboard</Link>
+            <Route path="/" component={Login}/>
+        </div>
+    </Router>
+)
 
-React.render(<Login />, root);
+export default App;
