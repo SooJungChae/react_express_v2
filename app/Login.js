@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
+import Header from './client/Header';
 
 class Login extends Component {
 
@@ -84,6 +85,7 @@ class Login extends Component {
         }
         return (
             <div>
+                <Header />
                 로그인 페이지
                 <label>대리점코드</label>
                 <input type="text"
